@@ -1,4 +1,3 @@
-import statistics
 import time
 from collections import Counter
 
@@ -133,15 +132,8 @@ def printMonthly(chara: character):
         # 中位数
         rslt = np.sort(reslt[i], axis=0)  # 按列排序
         effects = rslt[..., 0]  # 每行第0列
-        # print(f'{effects = }')
-        # datas1 = midNums(rslt)
-        # print(datas1)
         datas = np.mean(rslt, axis=0)
         std = np.std(rslt, axis=0)
-        # datas = np.array([statistics.median_grouped(rslt[..., i]) for i in np.arange(rslt.shape[1])])
-        # print(list(map(lambda x: Effect2Weight(x[0], x[1]), zip(datas, datas1))))
-        # 双指标
-        # table.append([f'{i+1} month(s)', mideffect, Damage2Weight(mideffect), midbigdamage])
         table[i, ...] = datas
         stds[i, ...] = std
         # 排序、累加
@@ -194,21 +186,19 @@ def printMonthly(chara: character):
     ax4.set_ylabel(r'目标函数/平均值$\pm$标准差(68.27%)')
     ax4.set_title(to2rows(chara.intro))
     ax4.plot(np.arange(MONTH) + 1, table[..., 0])
-    # ax4.plot(np.arange(MONTH) + 1, table[..., 0] + stds[..., 0])
-    # ax4.plot(np.arange(MONTH) + 1, table[..., 0] - stds[..., 0])
     ax4.fill_between(np.arange(MONTH) + 1, table[..., 0] - stds[..., 0], table[..., 0] + stds[..., 0], alpha=0.3)
     fig4.savefig('N %s.png' % toFilename(chara.intro), dpi=400)
 
 
-def to2rows(intro: str, sep: str = ' / '):
+def to2rows(intro: str, sep: str = ' / ', formerSep: str = '\n'):
     pnt = 0
     dis = len(intro)
     for cnt in range(666):
-        pnt = intro.find('\n', pnt + 1)
+        pnt = intro.find(formerSep, pnt + 1)
         if pnt != -1 and abs(pnt * 2 - len(intro)) < dis:
             dis = abs(pnt * 2 - len(intro))
         else:
-            intro = intro.strip().split('\n')
+            intro = intro.strip().split(formerSep)
             return '\n'.join([sep.join(intro[:cnt]), sep.join(intro[cnt:])])
 
 
@@ -216,34 +206,12 @@ def toFilename(intro: str, sep: str = '__'):
     return intro.strip().replace('\n', sep)
 
 
-def myprint(*args, sep=' '):
+def myprint(*args: any, sep: str = ' ') -> None:
     out = sep.join(map(str, args))
     out = out.replace("'", '"')
     print(out)
     with open(f'{FILE}.vb', 'a', encoding='utf-8') as fout:
         fout.write(out + '\n')
-
-
-# def midNums(lis: np.ndarray):
-#     # print(f'{lis[(length-1)//2:length//2+1] = }')
-#     # return np.average(lis[(length - 1) // 2:length // 2 + 1], 0)
-#     # weight = np.arange(1, PERSONS + 1) * np.arange(PERSONS, 0, -1)
-#     length = lis.shape[0]
-#     x = np.arange(0, length) / (length - 1)
-#     # 只取中间部分，实际是求平均值
-#     # x = x[length // 4:-length // 4]
-#     # lis = lis[length // 4:-length // 4]
-#     z = np.polyfit(x, lis, 1)
-#     p = np.array([np.poly1d(z[..., i]) for i in range(lis.shape[1])])
-#     # print(z, p)
-#     # plt.plot(x, lis)
-#     # for i in range(lis.shape[1]):
-#     # 	plt.plot(x, np.polyval(p[i], x))
-#     # plt.show()
-#     # weight = np.exp(-np.abs(x-0.5)*3)
-#     # return np.average((lis.T * weight).T, 0) / np.average(weight)
-#     # print(np.polyval(p[np.arange(lis.shape[1])], 0.5), np.average(lis, 0), np.array([np.polyval(p[i], 0.5) for i in range(lis.shape[1])]))
-#     return np.array([np.polyval(p[i], 0.5) for i in range(lis.shape[1])])
 
 
 def printTable(tab: list[list]):
@@ -254,12 +222,12 @@ def printTable(tab: list[list]):
     for j in np.arange(tab.shape[1]):
         l = max([len(tab[i, j]) for i in np.arange(tab.shape[0])])
         for i in np.arange(tab.shape[0]):
-            tab[i, j] = f'%-{l}s' % tab[i, j]
+            tab[i, j] = '%-*s' % (l, tab[i, j])
     ret = '\n'.join(['   '.join(x) for x in tab])
     myprint(ret)
 
 
-if __name__ == '__main__':
+def main2():
     global firstTable
     firstTable = None
     CHARA = getChara()
@@ -282,6 +250,10 @@ if __name__ == '__main__':
             printMonthly(chara)
             end = time.perf_counter()
             myprint(f'{end - begin = }')
+
+
+if __name__ == '__main__':
+    main2()
 
 # per 200*6
 # 21.6937246 __sub__

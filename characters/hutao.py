@@ -1,12 +1,11 @@
 from artifacts import Crimson_Witch_of_Flames
-from character import artifacts, character
-from weapons.Polearm import Staff_of_Homa
+from weapons.Polearm import *
 
 CHARACTER = 'Hu Tao'
 WEAPONS = [
     Staff_of_Homa,  # 护摩之杖
-    # Dragons_Bane,  # 匣里灭辰
-    # Deathmatch  # 决斗枪
+    Dragons_Bane,  # 匣里灭辰
+    Deathmatch  # 决斗枪
 ]
 ARTIFACT_SETS = [
     Crimson_Witch_of_Flames,  # 炽烈的炎之魔女
