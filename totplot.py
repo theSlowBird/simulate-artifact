@@ -3,6 +3,7 @@ import re
 
 import numpy as np
 from matplotlib import pyplot as plt
+from matplotlib.ticker import MultipleLocator, AutoMinorLocator
 
 from param import MONTH
 from rand_main_np3 import to2rows
@@ -27,6 +28,10 @@ def paint(intro_, mean_, std_):
         ax4.fill_between(np.arange(MONTH) + 1, table[..., 0] - stds[..., 0], table[..., 0] + stds[..., 0], alpha=0.3)
 
     fig4.legend(loc='lower right')
+    ax4.xaxis.set_minor_locator(MultipleLocator(base=1))
+    ax4.yaxis.set_minor_locator(AutoMinorLocator())
+    plt.grid(which='minor', linestyle=':', linewidth=0.5)
+    # plt.grid(which='major', linestyle='-', linewidth=1)
     plt.show()
     fig4.savefig(prefix.replace(' / ', '__'), dpi=400)
 
