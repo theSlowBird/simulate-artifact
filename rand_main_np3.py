@@ -253,6 +253,7 @@ def main2():
 
 
 if __name__ == '__main__':
+    print(f'{CHARACTER = }')
     main2()
 
 # per 200*6

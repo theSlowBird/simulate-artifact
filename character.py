@@ -322,10 +322,12 @@ class character:
     def totalReactionBonus(self):
         return self.ReactionBonus() * self.BaseReactionBonus
 
-    def resistance(self) -> float:
+    @staticmethod
+    def resistance() -> float:
         return 0.9
 
-    def defend(self) -> float:
+    @staticmethod
+    def defend() -> float:
         return 0.5
 
     def effect(self) -> float:

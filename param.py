@@ -1,6 +1,6 @@
-from characters.hutao import *
+from characters.yoimiya import *
 
 MONTH = 12
-PERSONS = 45
+PERSONS = 4006
 
 print(f'{CHARACTER = }')

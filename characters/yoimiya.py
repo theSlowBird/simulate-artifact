@@ -1,4 +1,4 @@
-from artifacts import Shimenawas_Reminiscence
+from artifacts import Shimenawas_Reminiscence, Echoes_of_an_Offering
 from character import artifacts, character
 from tools import formIfNumhalfk
 from weapons.Bow import Thundering_Pulse, Rust, Slingshot
@@ -10,7 +10,8 @@ WEAPONS = [
     Slingshot,  # 弹弓
 ]
 ARTIFACT_SETS = [
-    Shimenawas_Reminiscence  # 追忆之注连
+    Shimenawas_Reminiscence,  # 追忆之注连
+    Echoes_of_an_Offering  # 来歆余响
 ]
 MAINS = {
     'Flower of Life': ['HP'],
@@ -31,16 +32,36 @@ DEFAULT_ARTIFACTS = {
 class Yoimiya(character):
     def __init__(self, BaseHP: float, BaseATK: float, BaseDEF: float, element: str) -> None:
         super().__init__(BaseHP, BaseATK, BaseDEF, element)
+        self.add_rate = 0
         self.YunJin = 2587 * (0.6834 + 0.075)  # 火水双岩
         if self.YunJin:
             self.Bonus += 0.3  # 三命+双岩
         self.intro += f'YunJin = {formIfNumhalfk(self.YunJin)}\n'
 
+    def addRate(self, rate):
+        self.add_rate = rate
+
     def baseRateReaction(self) -> float:
-        return self.ATK() * 1.6174 * (0.6359 + 1.2199 + 0.8282 * 2) + self.YunJin * 4 + (self.ATK() * 1.6174 * (0.6359 + 1.5859 + 1.8887) + self.YunJin * 3) * self.totalReactionBonus()
+        return self.ATK() * (1.6174 * (0.6359 + 1.2199 + 0.8282 * 2) + self.add_rate * 4) + self.YunJin * 4 + (self.ATK() * (1.6174 * (0.6359 + 1.5859 + 1.8887) + self.add_rate * 3) + self.YunJin * 3) * self.totalReactionBonus()
 
     def effect(self) -> float:
         return self.baseRateReaction() * self.BONUS() * self.CRIT() * self.resistance() * self.defend()  # 伤害期望
+
+
+# class Yoimiya(character):
+#     def __init__(self, BaseHP: float, BaseATK: float, BaseDEF: float, element: str):
+#         super().__init__(BaseHP, BaseATK, BaseDEF, element)
+#         self.rate = 0.6359 * 2 + 1.219 + 1.5859 + 0.8282 * 2 + 1.88879
+#         self.reactionRatio = (0.6359 + 1.5859 + 1.8887) / self.rate
+#         self.rate *= 1.6174
+#         self.exATK = 632 * (0.2 + 0.95)
+#         self.intro += f'Bannet = {formIfNumhalfk(self.exATK)}\n'
+#         # 双火
+#         self.exATKs = 0.25
+#
+#     def addRate(self, rate):
+#         self.reactionRatio = (self.reactionRatio * self.rate + rate * 3) / (self.rate + rate * 7)
+#         self.rate += rate * 7
 
 
 def getChara() -> Yoimiya:
@@ -48,5 +69,4 @@ def getChara() -> Yoimiya:
     yoimiya.CRIT_Rate += .192
     yoimiya.Bonus += 0.1
     yoimiya.BaseReactionBonus = 1.5
-    yoimiya.reactionRatio = 1
     return yoimiya

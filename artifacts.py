@@ -98,3 +98,10 @@ def Emblem_of_Severed_Fate(chara: character) -> None:
 	4-Piece Set:	Increases Elemental Burst DMG by 25% of Energy Recharge. A maximum of 75% bonus DMG can be obtained in this way."""
 	chara.EnergyRecharge += 0.2
 	'''剩下的去pram做'''
+
+
+def Echoes_of_an_Offering(chara: character) -> None:
+	"""2-Piece Set:	ATK +18%.
+	4-Piece Set:	When Normal Attacks hit opponents, there is a 36% chance that it will trigger Valley Rite, which will increase Normal Attack DMG by 70% of ATK. This effect will be dispelled 0.05s after a Normal Attack deals DMG. If a Normal Attack fails to trigger Valley Rite, the odds of it triggering the next time will increase by 20%. This trigger can occur once every 0.2s."""
+	chara.exATKs += 0.18
+	chara.addRate(0.3)
